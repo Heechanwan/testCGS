@@ -5,12 +5,13 @@ import { getFirestore } from 'firebase/firestore';
 
 // 🌟 Используем import.meta.env для доступа к переменным из .env.local
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID
+    apiKey: "AIzaSyCOvljy59DRG-5DJpF5bpLLd7j8jSgAczU",
+    authDomain: "testcgs-e72e0.firebaseapp.com",
+    projectId: "testcgs-e72e0",
+    storageBucket: "testcgs-e72e0.firebasestorage.app",
+    messagingSenderId: "515165536123",
+    appId: "1:515165536123:web:178e82521bc10e283d47de"
+
 };
 
 // Инициализация
