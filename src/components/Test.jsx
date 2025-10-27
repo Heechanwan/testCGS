@@ -16,7 +16,7 @@ function Test() {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const response = await fetch('/questions.json');
+      const response = await fetch('./questions.json');
       const data = await response.json();
       const studentRef = doc(db, `results/${classId}/students/${name}`);
       const studentSnap = await getDoc(studentRef);
