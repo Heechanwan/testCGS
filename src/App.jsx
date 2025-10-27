@@ -1,29 +1,14 @@
 import React, { useState } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+
 import ClassSelect from './components/ClassSelect';
 import NameInput from './components/NameInput';
 import Test from './components/Test';
 import Profile from './components/Profile';
 import Admin from './components/Admin';
 
-// 🌟 ЧТЕНИЕ КОНФИГУРАЦИИ ИЗ VITE ENV 🌟
-const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID
-};
-// ------------------------------------
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-
-// --- Новый компонент для выбора, куда идти после входа (с кнопкой выхода) ---
 const HomeSelection = ({ navigate, onLogout }) => ( 
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="centered" style={{ marginTop: '10vh' }}>
         <h2>Выберите действие</h2>

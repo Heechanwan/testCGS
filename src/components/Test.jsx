@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
-import { db } from '../App';
+import { db } from '../firebase'; // 🌟 ИСПРАВЛЕНО: импортируем из нового файла
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Test() {

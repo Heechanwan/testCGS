@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, deleteDoc, updateDoc, setDoc, getDoc } from 'firebase/firestore'; // Added getDoc import
-import { db } from '../App';
+import { collection, getDocs, doc, deleteDoc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase'; // 🌟 ИСПРАВЛЕНО: импортируем из нового файла
 import { motion } from 'framer-motion';
 
 const classes = ['5', '6', '7-8', '9-10-11'];
