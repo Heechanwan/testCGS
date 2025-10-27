@@ -2,10 +2,8 @@ name: Deploy Vite App to GitHub Pages
 
 on:
   push:
-    # Запускаем деплой только при пуше в ветку 'main'
     branches:
       - main
-  # Это позволяет вручную запустить деплой из вкладки Actions
   workflow_dispatch:
 
 jobs:
@@ -20,15 +18,21 @@ jobs:
         uses: actions/setup-node@v4 
         with:
           node-version: '20' 
-          cache: 'npm' # Кэшируем зависимости для ускорения
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
 
       - name: Build Project (with Vite)
-        # 🌟 КЛЮЧЕВОЕ ОБНОВЛЕНИЕ: БЛОК 'env' УДАЛЕН. 🌟
-        # Поскольку секреты названы VITE_*, GitHub Actions АВТОМАТИЧЕСКИ
-        # передает их в процесс 'npm run build' (Vite).
+        # 🌟 ВОЗВРАЩАЕМ ЯВНОЕ ПЕРЕДАЧУ СЕКРЕТОВ ДЛЯ ГАРАНТИИ 🌟
+        env:
+          # Используем именно те имена, которые вы задали в GitHub Secrets
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
         run: npm run build
 
       - name: Upload production-ready build files
