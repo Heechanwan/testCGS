@@ -1,0 +1,206 @@
+{
+  "5": [
+    {
+      "question": "Что мы называем var speed",
+      "answers": ["Переменная скорости", "Функция скорости", "Класс скорости", "Объект скорости"],
+      "correct": "Переменная скорости"
+    },
+    {
+      "question": "За перемещение по горизонтали (налево/направо) отвечает параметр:",
+      "answers": ["vel.y", "vel.x", "vel.z", "vel.ZERO"],
+      "correct": "vel.x"
+    },
+    {
+      "question": "Что является датчиком определения земли или поверхности?",
+      "answers": ["Sprite", "Animation Player", "Node2D", "RayCast2D"],
+      "correct": "RayCast2D"
+    },
+    {
+      "question": "Через что добавляется карта в приложении?",
+      "answers": ["RayCast2D", "Tilemap", "CollisionShape2D", "Label"],
+      "correct": "Tilemap"
+    },
+    {
+      "question": "Найдите правильно названную функцию в Godot",
+      "answers": ["fanc _process():", "function _process():", "func _process():", "Все ответы верны"],
+      "correct": "func _process():"
+    },
+    {
+      "question": "Как прибавить число к переменной?",
+      "answers": ["x += 1", "x = +1", "x = ++1", "Все ответы верны"],
+      "correct": "x += 1"
+    },
+    {
+      "question": "Что означает !=",
+      "answers": ["Важно", "Не равно", "Равно", "Умножение"],
+      "correct": "Не равно"
+    },
+    {
+      "question": "Что делает объект физическим и не даёт проходить сквозь объекты?",
+      "answers": ["CollisionShape2D", "Sprite", "Node2D", "Area2D"],
+      "correct": "CollisionShape2D"
+    },
+    {
+      "question": "Что означает children в коде - for image in $STATES.get_children():",
+      "answers": ["Элементы внутри STATES", "Элементы рядом с STATES", "Элементы которых нет в STATES", "Нет правильного ответа"],
+      "correct": "Элементы внутри STATES"
+    },
+    {
+      "question": "Когда мы пишем внутри функции мы используем клавишу **** для отступа от края",
+      "answers": ["Пробел", "TAB", "Вправо", "Влево"],
+      "correct": "TAB"
+    }
+  ],
+  "6": [
+    {
+      "question": "Что мы называем var speed",
+      "answers": ["Переменная скорости", "Функция скорости", "Класс скорости", "Объект скорости"],
+      "correct": "Переменная скорости"
+    },
+    {
+      "question": "За перемещение по горизонтали (налево/направо) отвечает параметр:",
+      "answers": ["vel.y", "vel.x", "vel.z", "vel.ZERO"],
+      "correct": "vel.x"
+    },
+    {
+      "question": "Что является датчиком определения земли или поверхности?",
+      "answers": ["Sprite", "Animation Player", "Node2D", "RayCast2D"],
+      "correct": "RayCast2D"
+    },
+    {
+      "question": "Через что добавляется карта в приложении?",
+      "answers": ["RayCast2D", "Tilemap", "CollisionShape2D", "Label"],
+      "correct": "Tilemap"
+    },
+    {
+      "question": "Найдите правильно названную функцию в Godot",
+      "answers": ["fanc _process():", "function _process():", "func _process():", "Все ответы верны"],
+      "correct": "func _process():"
+    },
+    {
+      "question": "Как прибавить число к переменной?",
+      "answers": ["x += 1", "x = +1", "x = ++1", "Все ответы верны"],
+      "correct": "x += 1"
+    },
+    {
+      "question": "Что означает !=",
+      "answers": ["Важно", "Не равно", "Равно", "Умножение"],
+      "correct": "Не равно"
+    },
+    {
+      "question": "Что делает объект физическим и не даёт проходить сквозь объекты?",
+      "answers": ["CollisionShape2D", "Sprite", "Node2D", "Area2D"],
+      "correct": "CollisionShape2D"
+    },
+    {
+      "question": "Что означает children в коде - for image in $STATES.get_children():",
+      "answers": ["Элементы внутри STATES", "Элементы рядом с STATES", "Элементы которых нет в STATES", "Нет правильного ответа"],
+      "correct": "Элементы внутри STATES"
+    },
+    {
+      "question": "Когда мы пишем внутри функции мы используем клавишу **** для отступа от края",
+      "answers": ["Пробел", "TAB", "Вправо", "Влево"],
+      "correct": "TAB"
+    }
+  ],
+  "7-8": [
+    {
+      "question": "Что мы называем var speed",
+      "answers": ["Переменная скорости", "Функция скорости", "Класс скорости", "Объект скорости"],
+      "correct": "Переменная скорости"
+    },
+    {
+      "question": "За перемещение по горизонтали (налево/направо) отвечает параметр:",
+      "answers": ["vel.y", "vel.x", "vel.z", "vel.ZERO"],
+      "correct": "vel.x"
+    },
+    {
+      "question": "Что является датчиком определения земли или поверхности?",
+      "answers": ["Sprite", "Animation Player", "Node2D", "RayCast2D"],
+      "correct": "RayCast2D"
+    },
+    {
+      "question": "Через что добавляется карта в приложении?",
+      "answers": ["RayCast2D", "Tilemap", "CollisionShape2D", "Label"],
+      "correct": "Tilemap"
+    },
+    {
+      "question": "Найдите правильно названную функцию в Godot",
+      "answers": ["fanc _process():", "function _process():", "func _process():", "Все ответы верны"],
+      "correct": "func _process():"
+    },
+    {
+      "question": "Как прибавить число к переменной?",
+      "answers": ["x += 1", "x = +1", "x = ++1", "Все ответы верны"],
+      "correct": "x += 1"
+    },
+    {
+      "question": "Что означает !=",
+      "answers": ["Важно", "Не равно", "Равно", "Умножение"],
+      "correct": "Не равно"
+    },
+    {
+      "question": "Что делает объект физическим и не даёт проходить сквозь объекты?",
+      "answers": ["CollisionShape2D", "Sprite", "Node2D", "Area2D"],
+      "correct": "CollisionShape2D"
+    },
+    {
+      "question": "Что означает children в коде - for image in $STATES.get_children():",
+      "answers": ["Элементы внутри STATES", "Элементы рядом с STATES", "Элементы которых нет в STATES", "Нет правильного ответа"],
+      "correct": "Элементы внутри STATES"
+    },
+    {
+      "question": "Когда мы пишем внутри функции мы используем клавишу **** для отступа от края",
+      "answers": ["Пробел", "TAB", "Вправо", "Влево"],
+      "correct": "TAB"
+    }
+  ],
+
+  "9-10-11": [
+    {
+      "question": "Для чего нужен HTML",
+      "answers": ["Для создания структуры сайта", "Для создания стиля сайта", "Для создания скриптов сайта", "Все ответы верны"],
+      "correct": "Для создания структуры сайта"
+    },
+    {
+      "question": "Для чего нужен CSS",
+      "answers": ["Для создания структуры сайта", "Для создания стиля сайта", "Для создания скриптов сайта", "Все ответы верны"],
+      "correct": "Для создания стиля сайта"
+    },
+    {
+      "question": "Для чего нужен JavaScript",
+      "answers": ["Для создания структуры сайта", "Для создания стиля сайта", "Для создания скриптов сайта", "Все ответы верны"],
+      "correct": "Для создания скриптов сайта"
+    },
+    {
+      "question": "Для чего нужен <a href=''>  </a>",
+      "answers": ["Чтобы создать картинку", "Чтобы создать ссылку", "Чтобы создать заголовок", "Нет правильного ответа"],
+      "correct": "Чтобы создать ссылку"
+    },
+    {
+      "question": "Через что создаётся заголовок?",
+      "answers": ["<img src=''>", "<a href=''> </a>", "<h1> </h1>", "<p></p>"],
+      "correct": "<h1> </h1>"
+    },
+    {
+      "question": "Чем мы объединяем теги в один блок?",
+      "answers": ["<div> </div>", "<p> </p>", "<head> </head>", "<h3> </h3>"],
+      "correct": "<div> </div>"
+    },
+    {
+      "question": "С помощью чего мы добавляем рамку в CSS?",
+      "answers": ["border: 1px solid", "transition: .3s all", "background-color: black", "padding: 10px"],
+      "correct": "border: 1px solid"
+    },
+    {
+      "question": "Для чего нужен Bootstrap?",
+      "answers": ["Для написания скриптов", "Для быстрого создания сайта", "Для анимаций", "Нет правильного ответа"],
+      "correct": "Для быстрого создания сайта"
+    },
+    {
+      "question": "Можно ли добавить картинку в <img src=''> ссылкой из интернета?",
+      "answers": ["Нет, картинку надо скачать", "Нет, ссылки не поддерживаются", "Да, можно", "Нет правильного ответа"],
+      "correct": "Да, можно"
+    }
+  ]
+}
