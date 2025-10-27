@@ -16,8 +16,20 @@ function Test() {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const response = await fetch('./questions.json');
+      // 🌟 ИСПРАВЛЕННЫЙ ПУТЬ: используем BASE_URL для корректной загрузки
+      // На GitHub Pages это будет выглядеть как fetch('/testCGS/questions.json')
+      const response = await fetch(`${import.meta.env.BASE_URL}questions.json`);
+      
+      // Проверяем, что ответ успешный, прежде чем парсить JSON
+      if (!response.ok) {
+        console.error("Failed to fetch questions. JSON file not found or network error.");
+        // Можно добавить более дружелюбное сообщение для пользователя, если файл не найден
+        setQuestions([]); 
+        return;
+      }
+      
       const data = await response.json();
+      
       const studentRef = doc(db, `results/${classId}/students/${name}`);
       const studentSnap = await getDoc(studentRef);
       let answered = studentSnap.exists() ? studentSnap.data().answeredQuestions || [] : [];
@@ -76,7 +88,8 @@ function Test() {
     }
   };
 
-  if (!questions.length) return <div>Вопросы отсутствуют или все вопросы пройдены</div>;
+  // Добавим проверку на загрузку
+  if (!questions.length) return <div>Загрузка вопросов... Вопросы отсутствуют или все вопросы пройдены.</div>;
 
   return (
     <AnimatePresence mode="wait">
