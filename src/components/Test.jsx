@@ -18,7 +18,7 @@ function Test() {
     const fetchQuestions = async () => {
       // 🌟 ИСПРАВЛЕННЫЙ ПУТЬ: используем BASE_URL для корректной загрузки
       // На GitHub Pages это будет выглядеть как fetch('/testCGS/questions.json')
-      const response = await fetch(`${import.meta.env.BASE_URL}questions.json`);
+      const response = await fetch(`/testCGS/questions.json`);
       
       // Проверяем, что ответ успешный, прежде чем парсить JSON
       if (!response.ok) {
