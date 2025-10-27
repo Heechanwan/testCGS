@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../App';
+import { db } from '../firebase';
 import { motion } from 'framer-motion';
 
 function NameInput() {
