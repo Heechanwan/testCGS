@@ -17,7 +17,7 @@ const HomeSelection = ({ navigate, onLogout }) => (
                 Начать тестирование (Ученик)
             </button>
             <button onClick={() => navigate('/admin')} style={{ margin: '10px' }}>
-                Панель Администратора
+                Панель Админа
             </button>
         </div>
         <button 
