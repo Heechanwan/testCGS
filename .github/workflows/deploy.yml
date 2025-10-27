@@ -1,49 +1,66 @@
-name: Deploy
+name: Deploy Vite App to GitHub Pages
 
 on:
   push:
+    # Запускаем деплой только при пуше в ветку 'main'
     branches:
       - main
+    # Это позволяет вручную запустить деплой из вкладки Actions
+    workflow_dispatch:
 
 jobs:
   build:
-    name: Build
+    name: Build Project
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4 # Обновленная версия
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        # Рекомендуется использовать актуальную LTS-версию
+        uses: actions/setup-node@v4 
+        with:
+          node-version: '20' 
+          cache: 'npm' # Кэшируем зависимости для ускорения
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Build project
+      - name: Build Project (with Vite)
+        # Убедитесь, что в vite.config.js стоит base: '/testCGS/'
+        # и в корневом index.html стоит src="./src/main.jsx"
         run: npm run build
 
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: production-files
           path: ./dist
+          # Указываем срок хранения артефакта
+          retention-days: 1 
 
   deploy:
-    name: Deploy
+    name: Deploy to GitHub Pages
+    # Зависит от успешного выполнения 'build'
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # Деплоим только если пуш был в ветку 'main'
+    if: github.ref == 'refs/heads/main' 
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
         with:
           name: production-files
           path: ./dist
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        # 🌟 Используем актуальную версию v4
+        uses: peaceiris/actions-gh-pages@v4 
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          # Встроенный токен для авторизации деплоя
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
+          # Папка, которую нужно опубликовать
+          publish_dir: ./dist 
+          # Эта настройка сохраняет историю деплоев в ветке gh-pages
+          # keep_files: false # Очищать папку перед деплоем
