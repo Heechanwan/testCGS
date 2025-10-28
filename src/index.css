@@ -1,5 +1,8 @@
-*{
-  font-family: 'Roboto';
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 :root {
@@ -7,17 +10,27 @@
   --text: #fff;
   --accent: #333;
   --button: #555;
+  --card-bg: #2a2a2a;
+  --card-border: #444;
+  --card-hover: #333;
+  --success: #8bc34a;
+  --warning: #ffb74d;
+  --danger: #e57373;
+  --scrollbar: #666;
+  --scrollbar-bg: #222;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 1rem;
+  font-size: 16px;
 }
 
 .app {
@@ -28,17 +41,18 @@ body {
   align-items: center;
 }
 
+/* === ОСНОВНОЙ КОНТЕЙНЕР === */
 .centered {
-  text-align: center;
   background: var(--accent);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  transition: box-shadow 0.5s ease, border 0.5s ease, height 0.5s ease-in-out;
-  width: 600px; /* Fixed width to prevent horizontal resizing */
-  max-width: 90vw; /* Responsive for smaller screens */
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 1100px;
+  transition: all 0.3s ease;
 }
 
+/* === ЭФФЕКТЫ ТЕСТА === */
 .shadow-green {
   box-shadow: 0 0 20px rgba(40, 167, 69, 0.7);
   animation: pulse-green 1.5s infinite ease-in-out;
@@ -58,32 +72,21 @@ body {
 }
 
 @keyframes pulse-green {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(40, 167, 69, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(40, 167, 69, 1);
-  }
+  0%, 100% { box-shadow: 0 0 20px rgba(40, 167, 69, 0.7); }
+  50% { box-shadow: 0 0 30px rgba(40, 167, 69, 1); }
 }
 
 @keyframes pulse-red {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(220, 53, 69, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(220, 53, 69, 1);
-  }
+  0%, 100% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.7); }
+  50% { box-shadow: 0 0 30px rgba(220, 53, 69, 1); }
 }
 
 @keyframes gradient-run {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 400% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
 }
 
+/* === ВАРИАНТЫ ОТВЕТА === */
 .answer-option {
   border: 2px solid transparent;
   transition: background 0.3s ease, border 0.3s ease;
@@ -107,37 +110,50 @@ body {
   animation: gradient-run 3s linear infinite;
 }
 
+/* === КНОПКИ === */
 button {
   background: var(--button);
   color: var(--text);
   border: none;
   padding: 0.7rem 1rem;
-  margin: 0.5rem;
-  margin-left: 0 !important;
+  margin: 0.5rem 0.25rem;
   cursor: pointer;
   border-radius: 8px;
-  transition: opacity 0.3s ease;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 button:hover {
   background: #666;
+  transform: translateY(-1px);
 }
 
 button:disabled {
   background: #444;
-  cursor: not-allowed;
   opacity: 0.5;
+  cursor: not-allowed;
 }
 
+/* === ПОЛЯ ВВОДА === */
 input {
   background: #222;
   color: var(--text);
   border: 1px solid #444;
-  padding: 0.5rem;
-  margin: 0.5rem;
-  border-radius: 4px;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 100%;
 }
 
+input:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.3);
+}
+
+/* === ТЕСТ === */
 .test {
   text-align: left;
 }
@@ -147,15 +163,336 @@ input {
   border-radius: 12px !important;
 }
 
+/* === АДМИН ПАНЕЛЬ === */
 .admin {
-  max-width: 800px;
+  max-width: 1200px;
+  padding: 1.5rem;
+  text-align: left;
 }
 
+.admin h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* === АККОРДЕОН КЛАССА === */
+.class-accordion {
+  margin-bottom: 1.5rem;
+  background: #252525;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.accordion-header {
+  padding: 1.2rem 1.8rem;
+  background: linear-gradient(135deg, #333, #2a2a2a);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.accordion-header:hover {
+  background: linear-gradient(135deg, #3a3a3a, #333);
+}
+
+.accordion-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.accordion-icon {
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+  color: #aaa;
+}
+
+.accordion-header[aria-expanded="true"] .accordion-icon {
+  transform: rotate(90deg);
+}
+
+.student-count {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+/* === СЕТКА УЧЕНИКОВ === */
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  max-height: 65vh;
+  overflow-y: auto;
+  background: #1e1e1e;
+}
+
+.students-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.students-grid::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: 4px;
+}
+
+.students-grid::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 4px;
+}
+
+.students-grid::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* === КАРТОЧКА УЧЕНИКА === */
+.student-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--danger), var(--warning), var(--success));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.student-card:hover::before {
+  opacity: 1;
+}
+
+.student-card:hover {
+  background: var(--card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* === ОСНОВНАЯ ИНФОРМАЦИЯ === */
+.student-main h4.student-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.grade-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.grade-label {
+  color: #aaa;
+  font-weight: 500;
+}
+
+.grade-value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.grade-good { color: var(--success); }
+.grade-mid { color: var(--warning); }
+.grade-bad { color: var(--danger); }
+
+.progress-bar {
+  flex: 1;
+  min-width: 100px;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-left: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progress-good { background: var(--success); }
+.progress-mid { background: var(--warning); }
+.progress-bad { background: var(--danger); }
+
+.retake-badge {
+  background: #ff9800;
+  color: #000;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+/* === ДЕЙСТВИЯ === */
+.student-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.action-btn.edit {
+  background: #2196f3;
+}
+.action-btn.edit:hover {
+  background: #1976d2;
+}
+
+.action-btn.delete {
+  background: #f44336;
+}
+.action-btn.delete:hover {
+  background: #d32f2f;
+}
+
+.action-btn.retake {
+  background: #9c27b0;
+}
+.action-btn.retake.active {
+  background: #4caf50;
+}
+.action-btn.retake:hover {
+  background: #7b1fa2;
+}
+.action-btn.retake.active:hover {
+  background: #388e3c;
+}
+
+/* === РЕДАКТИРОВАНИЕ ИМЕНИ === */
+.edit-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-name input {
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-confirm {
+  background: #4caf50;
+  flex: 1;
+}
+.btn-confirm:hover {
+  background: #388e3c;
+}
+
+.btn-cancel {
+  background: #757575;
+  flex: 1;
+}
+.btn-cancel:hover {
+  background: #616161;
+}
+
+/* === АДАПТИВНОСТЬ === */
+@media (max-width: 768px) {
+  .students-grid {
+    grid-template-columns: 1fr;
+    padding: 0.75rem;
+  }
+
+  .accordion-header {
+    padding: 1rem 1.2rem;
+  }
+
+  .student-card {
+    padding: 1rem;
+  }
+
+  .centered {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .centered {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .admin h2 {
+    font-size: 1.5rem;
+  }
+
+  .accordion-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .student-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}
+
+/* === ПРОЧИЕ === */
 ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
-  margin: 1rem 0;
+  margin: 0;
+}
+
+/* === ИКОНКИ СТРЕЛОК (100% РАБОТАЕТ) === */
+.accordion-icon {
+  font-size: 1.4rem;
+  color: #aaa;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.accordion-header[aria-expanded="true"] .accordion-icon {
+  transform: rotate(90deg);
 }
