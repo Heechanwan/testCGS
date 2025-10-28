@@ -1,59 +1,72 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase'; // 🌟 ИСПРАВЛЕНО: импортируем из нового файла
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// Функция перемешивания массива (Fisher-Yates)
+const shuffleArray = (array) => {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
 
 function Test() {
   const { classId, name } = useParams();
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]); // Вопросы (с перемешанными ответами)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]); // Массив ответов пользователя
+  const [answeredQuestions, setAnsweredQuestions] = useState([]); // Индексы отвеченных вопросов
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      // 🌟 ИСПРАВЛЕННЫЙ ПУТЬ: используем BASE_URL для корректной загрузки
-      // На GitHub Pages это будет выглядеть как fetch('/testCGS/questions.json')
-      const response = await fetch(`/testCGS/questions.json`);
-      
-      // Проверяем, что ответ успешный, прежде чем парсить JSON
-      if (!response.ok) {
-        console.error("Failed to fetch questions. JSON file not found or network error.");
-        // Можно добавить более дружелюбное сообщение для пользователя, если файл не найден
-        setQuestions([]); 
-        return;
+      try {
+        const response = await fetch(`/testCGS/questions.json`);
+        if (!response.ok) {
+          console.error("Failed to fetch questions.json");
+          setQuestions([]);
+          return;
+        }
+
+        const data = await response.json();
+        const studentRef = doc(db, `results/${classId}/students/${name}`);
+        const studentSnap = await getDoc(studentRef);
+        const answered = studentSnap.exists() ? studentSnap.data().answeredQuestions || [] : [];
+
+        let availableQuestions = (data[classId] || [])
+          .map((q, i) => ({ ...q, originalIndex: i }))
+          .filter((q) => !answered.includes(q.originalIndex));
+
+        // Перемешиваем вопросы
+        availableQuestions = shuffleArray(availableQuestions);
+
+        // Перемешиваем ответы в каждом вопросе
+        const questionsWithShuffledAnswers = availableQuestions.map(q => ({
+          ...q,
+          answers: shuffleArray(q.answers),
+        }));
+
+        setQuestions(questionsWithShuffledAnswers);
+        setAnsweredQuestions(answered);
+      } catch (err) {
+        console.error("Error loading questions:", err);
+        setQuestions([]);
       }
-      
-      const data = await response.json();
-      
-      const studentRef = doc(db, `results/${classId}/students/${name}`);
-      const studentSnap = await getDoc(studentRef);
-      let answered = studentSnap.exists() ? studentSnap.data().answeredQuestions || [] : [];
-
-      let availableQuestions = data[classId] || [];
-      availableQuestions = availableQuestions
-        .map((q, i) => ({ ...q, originalIndex: i }))
-        .filter((q) => !answered.includes(q.originalIndex));
-
-      // Shuffle questions
-      for (let i = availableQuestions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [availableQuestions[i], availableQuestions[j]] = [availableQuestions[j], availableQuestions[i]];
-      }
-
-      setQuestions(availableQuestions);
-      setAnsweredQuestions(answered);
     };
+
     fetchQuestions();
   }, [classId, name]);
 
   const handleAnswer = (answer) => {
     setSelectedAnswer(answer);
-    const isAnswerCorrect = answer === questions[currentQuestionIndex].correct;
+    const correctAnswer = questions[currentQuestionIndex].correct;
+    const isAnswerCorrect = answer === correctAnswer;
     setIsCorrect(isAnswerCorrect);
   };
 
@@ -68,14 +81,11 @@ function Test() {
     if (currentQuestionIndex + 1 < questions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Calculate grade
-      let grade = 0;
-      newAnswers.forEach((a) => {
-        if (a.correct) grade++;
-      });
-      grade = questions.length > 0 ? (grade / questions.length) * 100 : 0;
+      // Подсчёт оценки
+      const correctCount = newAnswers.filter(a => a.correct).length;
+      const grade = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
 
-      // Save to Firebase
+      // Сохранение в Firebase
       const studentRef = doc(db, `results/${classId}/students/${name}`);
       await setDoc(studentRef, {
         grade,
@@ -88,8 +98,16 @@ function Test() {
     }
   };
 
-  // Добавим проверку на загрузку
-  if (!questions.length) return <div>Загрузка вопросов... Вопросы отсутствуют или все вопросы пройдены.</div>;
+  // Загрузка
+  if (!questions.length) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="centered">
+        <p>Загрузка вопросов... Если вопросов нет — все уже пройдены.</p>
+      </motion.div>
+    );
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <AnimatePresence mode="wait">
@@ -97,40 +115,51 @@ function Test() {
         key={currentQuestionIndex}
         className={`centered test ${selectedAnswer !== null ? (isCorrect ? 'shadow-green' : 'shadow-red') : ''}`}
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0, height: 'auto' }}
+        animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        transition={{ opacity: { duration: 0.5 }, y: { duration: 0.5 }, height: { duration: 0.5, ease: 'easeInOut' } }}
+        transition={{ duration: 0.4 }}
       >
-        <h2>Тест для класса {classId}</h2>
+        <h2>Вопрос {currentQuestionIndex + 1} из {questions.length}</h2>
+        <p style={{ margin: '1rem 0', fontSize: '1.1rem' }}>
+          {currentQuestion.question}
+        </p>
+
         <div>
-          <p>{questions[currentQuestionIndex].question}</p>
-          {questions[currentQuestionIndex].answers.map((answer, index) => (
+          {currentQuestion.answers.map((answer, index) => (
             <label
               key={index}
-              className={`answer-option ${selectedAnswer === answer ? (isCorrect ? 'border-green' : 'border-red') : ''}`}
-              style={{
-                display: 'block',
-                padding: '0.5rem',
-                borderRadius: '4px',
-              }}
+              className={`answer-option ${
+                selectedAnswer === answer
+                  ? isCorrect
+                    ? 'border-green'
+                    : 'border-red'
+                  : ''
+              }`}
             >
               <input
                 type="radio"
-                name="answer"
+                name={`answer-${currentQuestionIndex}`}
                 checked={selectedAnswer === answer}
                 onChange={() => handleAnswer(answer)}
                 disabled={selectedAnswer !== null}
               />
-              {answer}
+              <span>{answer}</span>
             </label>
           ))}
         </div>
+
         <button
           onClick={handleNext}
           disabled={selectedAnswer === null}
-          style={{ opacity: selectedAnswer === null ? 0.5 : 1 }}
+          style={{
+            marginTop: '1.5rem',
+            padding: '0.8rem 1.5rem',
+            fontSize: '1rem',
+            opacity: selectedAnswer === null ? 0.6 : 1,
+            cursor: selectedAnswer === null ? 'not-allowed' : 'pointer'
+          }}
         >
-          Далее
+          {currentQuestionIndex + 1 < questions.length ? 'Далее' : 'Завершить тест'}
         </button>
       </motion.div>
     </AnimatePresence>
