@@ -156,11 +156,19 @@ input:focus {
 /* === ТЕСТ === */
 .test {
   text-align: left;
+
+  p{
+    padding: 20px 0 !important;
+  }
 }
 
 .test label {
   margin: 0.5rem 0;
   border-radius: 12px !important;
+  display: grid !important;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  gap: 12px;
 }
 
 /* === АДМИН ПАНЕЛЬ === */
@@ -495,4 +503,39 @@ li {
 
 .accordion-header[aria-expanded="true"] .accordion-icon {
   transform: rotate(90deg);
+}
+
+
+
+/* === ГРАДИЕНТНАЯ ПОЛОСА СВЕРХУ (ГЛОБАЛЬНО) === */
+.app-gradient-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(90deg, 
+    #ff6b6b, 
+    #feca57, 
+    #48dbfb, 
+    #ff9ff3, 
+    #54a0ff, 
+    #5f27cd, 
+    #ff6b6b
+  );
+  background-size: 300% 100%;
+  animation: gradient-flow 8s ease infinite;
+  z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Поднимаем контент, чтобы не перекрывался */
+.app {
+  padding-top: 8px; /* высота градиента */
 }
