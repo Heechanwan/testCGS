@@ -8,19 +8,25 @@ const InteractiveBackground = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let points = [];
-        const spacing = 25; // Spacing between dots
-        const radius = 1; // Dot radius
-        const interactionRadius = 150; // Radius of mouse influence
-        const strength = 0.5; // How strongly they pull towards mouse
+        let waves = []; // Array to store active waves {x, y, startTime}
+        const spacing = 25;
+        const radius = 1;
+        const interactionRadius = 150;
+        const mouseStrength = 0.5;
+
+        // Wave parameters
+        const waveSpeed = 0.5; // Pixels per ms
+        const waveFrequency = 0.05;
+        const waveAmplitude = 15;
+        const waveWidth = 200; // Width of the ripple packet
 
         let mouse = { x: -1000, y: -1000 };
 
-        // Helper to get current theme colors
         const getThemeColors = () => {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            // Use hardcoded colors matching index.css to avoid getComputedStyle perf hit
             const dotColor = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)';
-            return { dotColor };
+            const activeGray = isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+            return { dotColor, activeGray };
         };
 
         const resize = () => {
@@ -28,6 +34,9 @@ const InteractiveBackground = () => {
             canvas.height = window.innerHeight;
             initPoints();
         };
+
+        // Added null to represent the "default/gray" color in the active palette
+        const googleColors = ['#4285F4', '#DB4437', '#F4B400', '#0F9D58', null];
 
         const initPoints = () => {
             points = [];
@@ -39,43 +48,91 @@ const InteractiveBackground = () => {
                         originX: x,
                         originY: y,
                         vx: 0,
-                        vy: 0
+                        vy: 0,
+                        color: googleColors[Math.floor(Math.random() * googleColors.length)]
                     });
                 }
             }
         };
 
         const draw = () => {
-            const { dotColor } = getThemeColors();
+            const { dotColor, activeGray } = getThemeColors();
+            const now = Date.now();
+            // Calculate max distance to corner to know when to remove wave
+            const maxDist = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) + 200;
 
-            // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = dotColor;
+            // Filter out old waves
+            waves = waves.filter(wave => {
+                const traveled = (now - wave.startTime) * waveSpeed;
+                return traveled < maxDist;
+            });
 
             points.forEach(point => {
-                // Distance to mouse
+                // 1. Mouse Interaction
                 const dx = mouse.x - point.originX;
                 const dy = mouse.y - point.originY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+                const distMouse = Math.sqrt(dx * dx + dy * dy);
 
                 let targetX = point.originX;
                 let targetY = point.originY;
+                let active = false;
 
-                if (dist < interactionRadius) {
-                    // Magnet effect: pull towards mouse
-                    const force = (interactionRadius - dist) / interactionRadius;
-
-                    targetX = point.originX + dx * force * strength;
-                    targetY = point.originY + dy * force * strength;
+                // Mouse magnet effect
+                if (distMouse < interactionRadius) {
+                    const force = (interactionRadius - distMouse) / interactionRadius;
+                    targetX += dx * force * mouseStrength;
+                    targetY += dy * force * mouseStrength;
+                    active = true;
                 }
 
-                // Smooth movement (ease out)
+                // 2. Wave Interaction
+                waves.forEach(wave => {
+                    const dxW = point.originX - wave.x;
+                    const dyW = point.originY - wave.y;
+                    const distW = Math.sqrt(dxW * dxW + dyW * dyW);
+
+                    const traveled = (now - wave.startTime) * waveSpeed;
+                    const distFromWaveFront = distW - traveled;
+
+                    // Only affect points within the "wave packet" range
+                    if (Math.abs(distFromWaveFront) < waveWidth) {
+                        // Sine wave function for ripple effect
+                        // We use a Gaussian window to taper the wave packet edges smoothly
+                        const x = distFromWaveFront;
+                        // Gaussian envelope: exp(-x^2 / (2*sigma^2))
+                        // sigma = waveWidth / 3 ensures it decays to near 0 at edges
+                        const envelope = Math.exp(-(x * x) / (2 * (waveWidth / 3) ** 2));
+                        const displacement = Math.sin(x * waveFrequency) * waveAmplitude * envelope;
+
+                        const angle = Math.atan2(dyW, dxW);
+
+                        // Move point radially
+                        targetX += Math.cos(angle) * displacement;
+                        targetY += Math.sin(angle) * displacement;
+
+                        // Activate color if displacement is significant
+                        if (Math.abs(displacement) > 2) {
+                            active = true;
+                        }
+                    }
+                });
+
+                // Smooth movement
                 point.x += (targetX - point.x) * 0.1;
                 point.y += (targetY - point.y) * 0.1;
 
                 ctx.beginPath();
                 ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+
+                // Color logic
+                if (active) {
+                    ctx.fillStyle = point.color || activeGray;
+                } else {
+                    ctx.fillStyle = dotColor;
+                }
+
                 ctx.fill();
             });
 
@@ -92,9 +149,18 @@ const InteractiveBackground = () => {
             mouse.y = -1000;
         };
 
+        const handleClick = (e) => {
+            waves.push({
+                x: e.clientX,
+                y: e.clientY,
+                startTime: Date.now()
+            });
+        };
+
         window.addEventListener('resize', resize);
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseout', handleMouseLeave);
+        window.addEventListener('click', handleClick);
 
         resize();
         draw();
@@ -103,6 +169,7 @@ const InteractiveBackground = () => {
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseout', handleMouseLeave);
+            window.removeEventListener('click', handleClick);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

@@ -8,6 +8,7 @@ import Test from './components/Test';
 import Profile from './components/Profile';
 import Admin from './components/Admin';
 import InteractiveBackground from './components/InteractiveBackground';
+import CopyrightInfo from './components/CopyrightInfo';
 
 
 const HomeSelection = ({ navigate, onLogout }) => (
@@ -101,6 +102,8 @@ function App() {
     return (
         <div className="app">
             <InteractiveBackground />
+            {!passwordEntered && <CopyrightInfo />}
+
             {/* Navigation Controls */}
             <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000, display: 'flex', gap: '10px' }}>
                 {showBackButton && (
