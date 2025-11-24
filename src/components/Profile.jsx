@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { motion } from 'framer-motion';
 
@@ -10,14 +10,17 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const studentRef = doc(db, `results/${classId}/students/${name}`);
-      const studentSnap = await getDoc(studentRef);
-      if (studentSnap.exists()) {
-        setData(studentSnap.data());
+    const studentRef = doc(db, `results/${classId}/students/${name}`);
+
+    // Listen for real-time updates
+    const unsubscribe = onSnapshot(studentRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setData(docSnap.data());
       }
-    };
-    fetchData();
+    });
+
+    // Cleanup listener on unmount
+    return () => unsubscribe();
   }, [classId, name]);
 
   const handleRetake = async () => {
@@ -36,8 +39,17 @@ function Profile() {
     >
       <h2>Профиль: {name} (класс {classId})</h2>
       <p>Оценка: {data.grade}%</p>
-      <button onClick={handleRetake} disabled={!data.retakeAllowed}>
-        Пересдать {data.retakeAllowed ? '' : '(неактивно)'}
+      <button
+        onClick={handleRetake}
+        disabled={!data.retakeAllowed}
+        className={data.retakeAllowed ? 'btn-info' : ''}
+        style={{
+          transition: 'all 0.3s ease',
+          transform: data.retakeAllowed ? 'scale(1.05)' : 'scale(1)',
+          boxShadow: data.retakeAllowed ? 'var(--elevation-2)' : 'none'
+        }}
+      >
+        {data.retakeAllowed ? 'Пересдать тест' : 'Пересдача недоступна'}
       </button>
     </motion.div>
   );
