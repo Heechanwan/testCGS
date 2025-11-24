@@ -63,11 +63,29 @@ function Test() {
     fetchQuestions();
   }, [classId, name]);
 
-  const handleAnswer = (answer) => {
+  const handleAnswer = (answer, event) => {
     setSelectedAnswer(answer);
     const correctAnswer = questions[currentQuestionIndex].correct;
     const isAnswerCorrect = answer === correctAnswer;
     setIsCorrect(isAnswerCorrect);
+
+    // Trigger ripple effect
+    if (event) {
+      // Get the label element (parent of the radio input)
+      const label = event.target.closest('label');
+      if (label) {
+        const rect = label.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        // Use Material Design colors: Green (Success) or Red (Error)
+        // We can use the CSS variables or hardcoded hexes that match
+        const color = isAnswerCorrect ? '#4CAF50' : '#B3261E';
+
+        window.dispatchEvent(new CustomEvent('trigger-ripple', {
+          detail: { x, y, color }
+        }));
+      }
+    }
   };
 
   const handleNext = async () => {
@@ -113,7 +131,8 @@ function Test() {
     <AnimatePresence mode="wait">
       <motion.div
         key={currentQuestionIndex}
-        className={`centered test ${selectedAnswer !== null ? (isCorrect ? 'border-green' : 'border-red') : ''}`}
+        className={`centered test border-beam ${selectedAnswer !== null ? 'active' : ''} ${selectedAnswer !== null ? (isCorrect ? 'beam-green' : 'beam-red') : ''
+          }`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
@@ -129,17 +148,17 @@ function Test() {
             <label
               key={index}
               className={`answer-option ${selectedAnswer === answer
-                  ? isCorrect
-                    ? 'border-green'
-                    : 'border-red'
-                  : ''
+                ? isCorrect
+                  ? 'border-green'
+                  : 'border-red'
+                : ''
                 }`}
             >
               <input
                 type="radio"
                 name={`answer-${currentQuestionIndex}`}
                 checked={selectedAnswer === answer}
-                onChange={() => handleAnswer(answer)}
+                onChange={(e) => handleAnswer(answer, e)}
                 disabled={selectedAnswer !== null}
               />
               <span>{answer}</span>

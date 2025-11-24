@@ -8,7 +8,7 @@ const InteractiveBackground = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let points = [];
-        let waves = []; // Array to store active waves {x, y, startTime}
+        let waves = []; // Array to store active waves {x, y, startTime, color?}
         const spacing = 25;
         const radius = 1;
         const interactionRadius = 150;
@@ -23,9 +23,9 @@ const InteractiveBackground = () => {
         let mouse = { x: -1000, y: -1000 };
 
         const getThemeColors = () => {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const dotColor = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)';
-            const activeGray = isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+            const styles = getComputedStyle(document.documentElement);
+            const dotColor = styles.getPropertyValue('--md-sys-color-outline-variant').trim() || 'rgba(0,0,0,0.2)';
+            const activeGray = styles.getPropertyValue('--md-sys-color-on-surface').trim() || '#000';
             return { dotColor, activeGray };
         };
 
@@ -78,6 +78,7 @@ const InteractiveBackground = () => {
                 let targetX = point.originX;
                 let targetY = point.originY;
                 let active = false;
+                let forcedColor = null;
 
                 // Mouse magnet effect
                 if (distMouse < interactionRadius) {
@@ -115,6 +116,9 @@ const InteractiveBackground = () => {
                         // Activate color if displacement is significant
                         if (Math.abs(displacement) > 2) {
                             active = true;
+                            if (wave.color) {
+                                forcedColor = wave.color;
+                            }
                         }
                     }
                 });
@@ -128,7 +132,7 @@ const InteractiveBackground = () => {
 
                 // Color logic
                 if (active) {
-                    ctx.fillStyle = point.color || activeGray;
+                    ctx.fillStyle = forcedColor || point.color || activeGray;
                 } else {
                     ctx.fillStyle = dotColor;
                 }
@@ -149,11 +153,27 @@ const InteractiveBackground = () => {
             mouse.y = -1000;
         };
 
+        const handleTriggerRipple = (e) => {
+            const { x, y, color } = e.detail;
+            waves.push({
+                x,
+                y,
+                startTime: Date.now(),
+                color // Store the specific color for this wave
+            });
+        };
+
         const handleClick = (e) => {
+            // Ignore clicks on interactive elements or containers
+            if (e.target.closest('button, input, label, a, .centered, .card')) {
+                return;
+            }
+
             waves.push({
                 x: e.clientX,
                 y: e.clientY,
                 startTime: Date.now()
+                // No color specified -> use point's own random color
             });
         };
 
@@ -161,6 +181,7 @@ const InteractiveBackground = () => {
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseout', handleMouseLeave);
         window.addEventListener('click', handleClick);
+        window.addEventListener('trigger-ripple', handleTriggerRipple);
 
         resize();
         draw();
@@ -170,6 +191,7 @@ const InteractiveBackground = () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseout', handleMouseLeave);
             window.removeEventListener('click', handleClick);
+            window.removeEventListener('trigger-ripple', handleTriggerRipple);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

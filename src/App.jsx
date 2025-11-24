@@ -9,6 +9,8 @@ import Profile from './components/Profile';
 import Admin from './components/Admin';
 import InteractiveBackground from './components/InteractiveBackground';
 import CopyrightInfo from './components/CopyrightInfo';
+import CustomCursor from './components/CustomCursor';
+import ThemeSelector from './components/ThemeSelector';
 
 
 const HomeSelection = ({ navigate, onLogout }) => (
@@ -40,6 +42,10 @@ function App() {
     const [theme, setTheme] = useState(() => {
         return localStorage.getItem('theme') || 'light';
     });
+    const [palette, setPalette] = useState(() => {
+        return localStorage.getItem('palette') || 'default';
+    });
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -47,6 +53,11 @@ function App() {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
     }, [theme]);
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-palette', palette);
+        localStorage.setItem('palette', palette);
+    }, [palette]);
 
     useEffect(() => {
         localStorage.setItem('auth', passwordEntered);
@@ -85,6 +96,7 @@ function App() {
                 <input type="password" name="password" />
                 <button type="submit">Войти</button>
             </form>
+            <ThemeSelector currentTheme={palette} onSelect={setPalette} />
         </motion.div>
     );
 
@@ -101,6 +113,7 @@ function App() {
 
     return (
         <div className="app">
+            <CustomCursor />
             <InteractiveBackground />
             {!passwordEntered && <CopyrightInfo />}
 
