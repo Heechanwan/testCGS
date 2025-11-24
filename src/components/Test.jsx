@@ -113,14 +113,14 @@ function Test() {
     <AnimatePresence mode="wait">
       <motion.div
         key={currentQuestionIndex}
-        className={`centered test ${selectedAnswer !== null ? (isCorrect ? 'shadow-green' : 'shadow-red') : ''}`}
+        className={`centered test ${selectedAnswer !== null ? (isCorrect ? 'border-green' : 'border-red') : ''}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.4 }}
       >
         <h2>Вопрос {currentQuestionIndex + 1} из {questions.length}</h2>
-        <p style={{ margin: '1rem 0', fontSize: '1.1rem' }}>
+        <p>
           {currentQuestion.question}
         </p>
 
@@ -128,13 +128,12 @@ function Test() {
           {currentQuestion.answers.map((answer, index) => (
             <label
               key={index}
-              className={`answer-option ${
-                selectedAnswer === answer
+              className={`answer-option ${selectedAnswer === answer
                   ? isCorrect
                     ? 'border-green'
                     : 'border-red'
                   : ''
-              }`}
+                }`}
             >
               <input
                 type="radio"
@@ -151,13 +150,7 @@ function Test() {
         <button
           onClick={handleNext}
           disabled={selectedAnswer === null}
-          style={{
-            marginTop: '1.5rem',
-            padding: '0.8rem 1.5rem',
-            fontSize: '1rem',
-            opacity: selectedAnswer === null ? 0.6 : 1,
-            cursor: selectedAnswer === null ? 'not-allowed' : 'pointer'
-          }}
+          style={{ marginTop: '1.5rem' }}
         >
           {currentQuestionIndex + 1 < questions.length ? 'Далее' : 'Завершить тест'}
         </button>

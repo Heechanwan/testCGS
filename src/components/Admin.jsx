@@ -3,6 +3,7 @@ import { collection, getDocs, doc, deleteDoc, updateDoc, setDoc, getDoc } from '
 import { db } from '../firebase';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 const classes = ['5', '6', '7-8', '9-10-11'];
 const ADMIN_PASSWORD = '97485031';
 
@@ -109,16 +110,15 @@ function Admin() {
   if (!authenticated) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="centered">
-        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '300px' }}>
-          <label style={{ fontWeight: 'bold' }}>Админ пароль</label>
+        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '300px', margin: '0 auto' }}>
+          <label>Админ пароль</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Введите пароль"
-            style={{ padding: '0.8rem', fontSize: '1rem' }}
           />
-          <button type="submit" style={{ padding: '0.8rem', fontSize: '1rem' }}>
+          <button type="submit">
             Войти
           </button>
         </form>
@@ -132,7 +132,7 @@ function Admin() {
       animate={{ opacity: 1 }}
       className="centered admin"
     >
-      <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Админ панель</h2>
+      <h2 style={{ textAlign: 'center' }}>Админ панель</h2>
 
       {classes.map((cls) => (
         <motion.div
@@ -148,11 +148,11 @@ function Admin() {
             onClick={() => toggleClass(cls)}
             aria-expanded={openClasses[cls]}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div>
               <span className="accordion-icon">
                 {openClasses[cls] ? '-' : '+'}
               </span>
-              <h3 style={{ margin: 0 }}>Класс {cls}</h3>
+              <h3>Класс {cls}</h3>
               <span className="student-count">
                 {students[cls]?.length || 0} ученик(ов)
               </span>
@@ -164,9 +164,9 @@ function Admin() {
             {openClasses[cls] && (
               <motion.div
                 className="students-grid"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 {(students[cls] || []).map((student, index) => (
@@ -177,7 +177,6 @@ function Admin() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ delay: index * 0.05 }}
-                    whileHover={{ y: -4, boxShadow: '0 8px 20px rgba(0,0,0,0.4)' }}
                   >
                     <div className="student-main">
                       {editingName[`${cls}-${student.id}`] ? (
