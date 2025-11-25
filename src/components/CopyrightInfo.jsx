@@ -29,7 +29,7 @@ const CopyrightInfo = () => {
                         <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: 'var(--md-sys-color-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Информация</h4>
                         <p style={{ margin: 0, fontSize: '1rem', lineHeight: '1.5', color: 'var(--md-sys-color-on-surface)' }}>
                             Этот сайт принадлежит<br />
-                            <strong style={{ fontSize: '1.2rem', fontWeight: 500 }}>Куладашеву Анвару</strong>
+                            <strong style={{ fontSize: '1.2rem', fontWeight: 500 }}>Кулдашеву Анвару</strong>
                         </p>
                     </motion.div>
                 )}
