@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const classes = ['5', '6', '7-8', '9-10-11'];
+const classes = ['3-4', '5-6', '7-8', '9-10-11'];
 
 function ClassSelect() {
   const navigate = useNavigate();

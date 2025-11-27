@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Разрешить чтение и запись для всех документов
+    // ВНИМАНИЕ: Это небезопасно для продакшена, но подходит для разработки
+    // или если у вас есть только клиентская защита (как в вашем App.jsx).
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

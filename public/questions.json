@@ -1,206 +1,410 @@
 {
-  "5": [
+  "3-4": [
     {
-      "question": "Что мы называем var speed",
-      "answers": ["Переменная скорости", "Функция скорости", "Класс скорости", "Объект скорости"],
+      "question": "Что такое Area2D",
+      "answers": [
+        "Датчик",
+        "Картинка",
+        "Анимация",
+        "Яблоко"
+      ],
+      "correct": "Датчик"
+    },
+    {
+      "question": "Что такое var speed",
+      "answers": [
+        "Объект скорости",
+        "Переменная скорости",
+        "Класс скорости",
+        "Нет правильного ответа"
+      ],
       "correct": "Переменная скорости"
     },
     {
-      "question": "За перемещение по горизонтали (налево/направо) отвечает параметр:",
-      "answers": ["vel.y", "vel.x", "vel.z", "vel.ZERO"],
+      "question": "Через что делается анимация?",
+      "answers": [
+        "AnimationPlayer",
+        "Sprite",
+        "CollisionShape2D",
+        "Node2D"
+      ],
+      "correct": "AnimationPlayer"
+    },
+    {
+      "question": "Для чего нужен Sprite",
+      "answers": [
+        "Для добавления картинки",
+        "Для добавления музыки",
+        "Для добавления жизнй",
+        "Для добавления карты"
+      ],
+      "correct": "Для добавления картинки"
+    },
+    {
+      "question": "Движение налево-направо у нас выполняет..",
+      "answers": [
+        "vel.z",
+        "vel.y",
+        "vel.x",
+        "vel.a"
+      ],
       "correct": "vel.x"
     },
     {
-      "question": "Что является датчиком определения земли или поверхности?",
-      "answers": ["Sprite", "Animation Player", "Node2D", "RayCast2D"],
-      "correct": "RayCast2D"
+      "question": "Чтобы двигаться налево, наша скорость должна быть",
+      "answers": [
+        "var speed = 100",
+        "var speed = 0",
+        "var speed = -100",
+        "var speed = null"
+      ],
+      "correct": "var speed = -100"
     },
     {
-      "question": "Через что добавляется карта в приложении?",
-      "answers": ["RayCast2D", "Tilemap", "CollisionShape2D", "Label"],
-      "correct": "Tilemap"
+      "question": "Для чего нужен Tilemap?",
+      "answers": [
+        "Для создания карты",
+        "Для создания анимаций",
+        "Для создания физики",
+        "Нет правильного ответа"
+      ],
+      "correct": "Для создания карты"
     },
     {
-      "question": "Найдите правильно названную функцию в Godot",
-      "answers": ["fanc _process():", "function _process():", "func _process():", "Все ответы верны"],
-      "correct": "func _process():"
+      "question": "Как зовут вашего учителя?",
+      "answers": [
+        "Анвар",
+        "Анбар",
+        "Андар",
+        "Аннвар"
+      ],
+      "correct": "Анвар"
     },
     {
-      "question": "Как прибавить число к переменной?",
-      "answers": ["x += 1", "x = +1", "x = ++1", "Все ответы верны"],
-      "correct": "x += 1"
+      "question": "Для чего нужны if и else?",
+      "answers": [
+        "Для проверок условий",
+        "Для создания функции",
+        "Для вычитания жизней",
+        "Все ответы верны"
+      ],
+      "correct": "Для проверок условий"
     },
     {
-      "question": "Что означает !=",
-      "answers": ["Важно", "Не равно", "Равно", "Умножение"],
-      "correct": "Не равно"
-    },
-    {
-      "question": "Что делает объект физическим и не даёт проходить сквозь объекты?",
-      "answers": ["CollisionShape2D", "Sprite", "Node2D", "Area2D"],
-      "correct": "CollisionShape2D"
-    },
-    {
-      "question": "Что означает children в коде - for image in $STATES.get_children():",
-      "answers": ["Элементы внутри STATES", "Элементы рядом с STATES", "Элементы которых нет в STATES", "Нет правильного ответа"],
-      "correct": "Элементы внутри STATES"
-    },
-    {
-      "question": "Когда мы пишем внутри функции мы используем клавишу **** для отступа от края",
-      "answers": ["Пробел", "TAB", "Вправо", "Влево"],
-      "correct": "TAB"
+      "question": "Как пишется функция в Godot?",
+      "answers": [
+        "func _process(delta):",
+        "function _process(delta):",
+        "fanc _process(delta):",
+        "Нет правильного ответа"
+      ],
+      "correct": "func _process(delta):"
     }
   ],
-  "6": [
+  "5-6": [
     {
-      "question": "Что мы называем var speed",
-      "answers": ["Переменная скорости", "Функция скорости", "Класс скорости", "Объект скорости"],
-      "correct": "Переменная скорости"
+      "question": "Чтобы заставить объект прыгнуть, мы используем:",
+      "answers": [
+        "vel.y = -jump",
+        "vel.x = jump",
+        "vel.y = jump",
+        "vel.x = -jump"
+      ],
+      "correct": "vel.y = -jump"
     },
     {
-      "question": "За перемещение по горизонтали (налево/направо) отвечает параметр:",
-      "answers": ["vel.y", "vel.x", "vel.z", "vel.ZERO"],
-      "correct": "vel.x"
+      "question": "Чтобы объект имел физику гравитации, мы используем:",
+      "answers": [
+        "vel.x = 10",
+        "vel.y = 10",
+        "vel.y += 10",
+        "vel.x = -= 10"
+      ],
+      "correct": "vel.y += 10"
     },
     {
-      "question": "Что является датчиком определения земли или поверхности?",
-      "answers": ["Sprite", "Animation Player", "Node2D", "RayCast2D"],
-      "correct": "RayCast2D"
-    },
-    {
-      "question": "Через что добавляется карта в приложении?",
-      "answers": ["RayCast2D", "Tilemap", "CollisionShape2D", "Label"],
-      "correct": "Tilemap"
-    },
-    {
-      "question": "Найдите правильно названную функцию в Godot",
-      "answers": ["fanc _process():", "function _process():", "func _process():", "Все ответы верны"],
-      "correct": "func _process():"
-    },
-    {
-      "question": "Как прибавить число к переменной?",
-      "answers": ["x += 1", "x = +1", "x = ++1", "Все ответы верны"],
-      "correct": "x += 1"
-    },
-    {
-      "question": "Что означает !=",
-      "answers": ["Важно", "Не равно", "Равно", "Умножение"],
-      "correct": "Не равно"
-    },
-    {
-      "question": "Что делает объект физическим и не даёт проходить сквозь объекты?",
-      "answers": ["CollisionShape2D", "Sprite", "Node2D", "Area2D"],
+      "question": "Что создаётся внутри Area2D?",
+      "answers": [
+        "CollisionShape2D",
+        "Sprite",
+        "Кушать хочется",
+        "KinematicBody2D"
+      ],
       "correct": "CollisionShape2D"
     },
     {
-      "question": "Что означает children в коде - for image in $STATES.get_children():",
-      "answers": ["Элементы внутри STATES", "Элементы рядом с STATES", "Элементы которых нет в STATES", "Нет правильного ответа"],
-      "correct": "Элементы внутри STATES"
+      "question": "Чтобы удалить объект со сцены, мы используем:",
+      "answers": [
+        "delete()",
+        "remove_object()",
+        "queue_free()",
+        "destroy_free()"
+      ],
+      "correct": "queue_free()"
     },
     {
-      "question": "Когда мы пишем внутри функции мы используем клавишу **** для отступа от края",
-      "answers": ["Пробел", "TAB", "Вправо", "Влево"],
-      "correct": "TAB"
+      "question": "Найдите правильный вариант:",
+      "answers": [
+        "if body.name == \"Player\":",
+        "if body name == \"Player\"",
+        "if body.name = \"Player\":",
+        "if body.name == \"Player\""
+      ],
+      "correct": "if body.name == \"Player\":"
+    },
+    {
+      "question": "Сколько переменных с одинаковым именем мы можем создать в 1 скрипте?",
+      "answers": [
+        "Два",
+        "Сколько угодно",
+        "Один",
+        "Все ответы верны"
+      ],
+      "correct": "Один"
+    },
+    {
+      "question": "Для чего нужен CollisionShape2D?",
+      "answers": [
+        "Чтобы определить начало и конец объекта или датчика",
+        "Чтобы дать анимацию объекту",
+        "Чтобы объект мог двигаться",
+        "Чтобы персонаж не мог трогать землю"
+      ],
+      "correct": "Чтобы определить начало и конец объекта или датчика"
+    },
+    {
+      "question": "Зачем нам нужен RayCast2D?",
+      "answers": [
+        "Чтобы определять жизни",
+        "Чтобы определять поверхность",
+        "Чтобы определять время года",
+        "Покемон"
+      ],
+      "correct": "Чтобы определять поверхность"
+    },
+    {
+      "question": "Чтобы понять, что датчика коснулись, мы используем функцию:",
+      "answers": [
+        "func area2D_body_entered()",
+        "func area2D_body_exited()",
+        "func area2D_shape_released()",
+        "func area2D_shape_entered()"
+      ],
+      "correct": "func area2D_body_entered()"
+    },
+    {
+      "question": "Если мы создали объект AnimationPlayer и хотим воспроизвести анимацию IDLE, то мы используем:",
+      "answers": [
+        "$AnimationPlayer.play(\"IDLE\")",
+        "@AnimationPlayer.play(\"IDLE\")",
+        "$AnimationPlayer.play(IDLE)",
+        "@AnimationPlayer.play(IDLE)"
+      ],
+      "correct": "$AnimationPlayer.play(\"IDLE\")"
     }
   ],
   "7-8": [
     {
-      "question": "Что мы называем var speed",
-      "answers": ["Переменная скорости", "Функция скорости", "Класс скорости", "Объект скорости"],
-      "correct": "Переменная скорости"
+      "question": "Чтобы написать структуру сайта, мы используем:",
+      "answers": [
+        "HTML",
+        "CSS",
+        "JS",
+        "Всё вместе"
+      ],
+      "correct": "HTML"
     },
     {
-      "question": "За перемещение по горизонтали (налево/направо) отвечает параметр:",
-      "answers": ["vel.y", "vel.x", "vel.z", "vel.ZERO"],
-      "correct": "vel.x"
+      "question": "Чтобы написать стиль сайта, мы используем:",
+      "answers": [
+        "HTML",
+        "CSS",
+        "JS",
+        "Всё вместе"
+      ],
+      "correct": "CSS"
     },
     {
-      "question": "Что является датчиком определения земли или поверхности?",
-      "answers": ["Sprite", "Animation Player", "Node2D", "RayCast2D"],
-      "correct": "RayCast2D"
+      "question": "Для создания заголовка мы используем:",
+      "answers": [
+        "h1",
+        "p",
+        "a",
+        "Силу притяжения"
+      ],
+      "correct": "h1"
     },
     {
-      "question": "Через что добавляется карта в приложении?",
-      "answers": ["RayCast2D", "Tilemap", "CollisionShape2D", "Label"],
-      "correct": "Tilemap"
+      "question": "Для объединения информации в один блок, мы используем в HTML:",
+      "answers": [
+        "div",
+        "span",
+        "border",
+        "background-color"
+      ],
+      "correct": "div"
     },
     {
-      "question": "Найдите правильно названную функцию в Godot",
-      "answers": ["fanc _process():", "function _process():", "func _process():", "Все ответы верны"],
-      "correct": "func _process():"
+      "question": "Чтобы отличать блоки друг от друга и создавать им стили, мы используем:",
+      "answers": [
+        "class",
+        "id",
+        "name",
+        "Огурец"
+      ],
+      "correct": "class"
     },
     {
-      "question": "Как прибавить число к переменной?",
-      "answers": ["x += 1", "x = +1", "x = ++1", "Все ответы верны"],
-      "correct": "x += 1"
+      "question": "Как называются такие элементы \"<p></p>\"",
+      "answers": [
+        "Тэг параграфа",
+        "Пэг параграфа",
+        "Дэг параграфа",
+        "Гэг параграфа"
+      ],
+      "correct": "Тэг параграфа"
     },
     {
-      "question": "Что означает !=",
-      "answers": ["Важно", "Не равно", "Равно", "Умножение"],
-      "correct": "Не равно"
+      "question": "Чтобы создать рамку мы используем:",
+      "answers": [
+        "border: 1px solid black;",
+        "border-radius: 12px;",
+        "border-color: black;",
+        "border-div: 2px solid red;"
+      ],
+      "correct": "border: 1px solid black;"
     },
     {
-      "question": "Что делает объект физическим и не даёт проходить сквозь объекты?",
-      "answers": ["CollisionShape2D", "Sprite", "Node2D", "Area2D"],
-      "correct": "CollisionShape2D"
+      "question": "Чтобы создать плавность анимации, мы используем:",
+      "answers": [
+        "transform: 0.3s all;",
+        "transition: 0.3s all;",
+        "transposition: 0.3s all;",
+        "tetris: 0.3s all;"
+      ],
+      "correct": "transition: 0.3s all;"
     },
     {
-      "question": "Что означает children в коде - for image in $STATES.get_children():",
-      "answers": ["Элементы внутри STATES", "Элементы рядом с STATES", "Элементы которых нет в STATES", "Нет правильного ответа"],
-      "correct": "Элементы внутри STATES"
+      "question": "Чтобы создать тень в CSS мы используем:",
+      "answers": [
+        "shadow: 0 0 10px 0 black;",
+        "box-shadow: 0 0 10px 0 black;",
+        "div-shadow: 0 0 10px 0 black;",
+        "block-shadow: 0 0 10px 0 black;"
+      ],
+      "correct": "box-shadow: 0 0 10px 0 black;"
     },
     {
-      "question": "Когда мы пишем внутри функции мы используем клавишу **** для отступа от края",
-      "answers": ["Пробел", "TAB", "Вправо", "Влево"],
-      "correct": "TAB"
+      "question": "Чтобы создать внутренний отступ элемента, мы используем:",
+      "answers": [
+        "padding: 10px 20px;",
+        "margin: 10px 20px;",
+        "spacing: 10px 20px;",
+        "transition: 10px 20px;"
+      ],
+      "correct": "padding: 10px 20px;"
     }
   ],
-
   "9-10-11": [
     {
-      "question": "Для чего нужен HTML",
-      "answers": ["Для создания структуры сайта", "Для создания стиля сайта", "Для создания скриптов сайта", "Все ответы верны"],
-      "correct": "Для создания структуры сайта"
+      "question": "Чтобы создать переменную, мы используем:",
+      "answers": [
+        "let",
+        "set",
+        "get",
+        "pet"
+      ],
+      "correct": "let"
     },
     {
-      "question": "Для чего нужен CSS",
-      "answers": ["Для создания структуры сайта", "Для создания стиля сайта", "Для создания скриптов сайта", "Все ответы верны"],
-      "correct": "Для создания стиля сайта"
+      "question": "Выберите массив:",
+      "answers": [
+        "array = [1,2,3,4,5]",
+        "array = {1,2,3,4,5}",
+        "array = (1,2,3,4,5)",
+        "array = \"1,2,3,4,5\""
+      ],
+      "correct": "array = [1,2,3,4,5]"
     },
     {
-      "question": "Для чего нужен JavaScript",
-      "answers": ["Для создания структуры сайта", "Для создания стиля сайта", "Для создания скриптов сайта", "Все ответы верны"],
-      "correct": "Для создания скриптов сайта"
+      "question": "У нас есть массив array = [15, 24, 37, 68, 71], что надо написать, чтобы достать 68?",
+      "answers": [
+        "array[3]",
+        "array[4]",
+        "array[5]",
+        "array[68]"
+      ],
+      "correct": "array[3]"
     },
     {
-      "question": "Для чего нужен <a href=''>  </a>",
-      "answers": ["Чтобы создать картинку", "Чтобы создать ссылку", "Чтобы создать заголовок", "Нет правильного ответа"],
-      "correct": "Чтобы создать ссылку"
+      "question": "У нас есть массив, в котором 100 имён. Что надо написать, чтобы достать последний элемент?",
+      "answers": [
+        "array[array.length - 1]",
+        "array[last]",
+        "array[100]",
+        "array[lol]"
+      ],
+      "correct": "array[array.length - 1]"
     },
     {
-      "question": "Через что создаётся заголовок?",
-      "answers": ["<img src=''>", "<a href=''> </a>", "<h1> </h1>", "<p></p>"],
-      "correct": "<h1> </h1>"
+      "question": "Что выведет JavaScript, если написать 100 + \"51\"?",
+      "answers": [
+        "151",
+        "\"151\"",
+        "\"10051\"",
+        "error"
+      ],
+      "correct": "\"10051\""
     },
     {
-      "question": "Чем мы объединяем теги в один блок?",
-      "answers": ["<div> </div>", "<p> </p>", "<head> </head>", "<h3> </h3>"],
-      "correct": "<div> </div>"
+      "question": "Что выведет JavaScript, если написать 100 - \"24\"",
+      "answers": [
+        "76",
+        "\"76\"",
+        "error",
+        "Можно в туалет?"
+      ],
+      "correct": "76"
     },
     {
-      "question": "С помощью чего мы добавляем рамку в CSS?",
-      "answers": ["border: 1px solid", "transition: .3s all", "background-color: black", "padding: 10px"],
-      "correct": "border: 1px solid"
+      "question": "Как зовут вашего учителя?",
+      "answers": [
+        "Анвар",
+        "Анбар",
+        "Андар",
+        "Анввар"
+      ],
+      "correct": "Анвар"
     },
     {
-      "question": "Для чего нужен Bootstrap?",
-      "answers": ["Для написания скриптов", "Для быстрого создания сайта", "Для анимаций", "Нет правильного ответа"],
-      "correct": "Для быстрого создания сайта"
+      "question": "Если наш age = 10, то сработает ли условие if (age >= 15)?",
+      "answers": [
+        "Да",
+        "Нет",
+        "Спасите",
+        "0"
+      ],
+      "correct": "Нет"
     },
     {
-      "question": "Можно ли добавить картинку в <img src=''> ссылкой из интернета?",
-      "answers": ["Нет, картинку надо скачать", "Нет, ссылки не поддерживаются", "Да, можно", "Нет правильного ответа"],
-      "correct": "Да, можно"
+      "question": "Чтобы соединить JavaScript и HTML, мы используем:",
+      "answers": [
+        "<script src=\"./index.js\">.....",
+        "<script src=\"./index.css\">.....",
+        "<link src=\"./index.js\">.....",
+        "<link src=\"./index.css\">....."
+      ],
+      "correct": "<script src=\"./index.js\">....."
+    },
+    {
+      "question": "Сколько переменных с одинаковым именем мы можем создать в JavaScript?",
+      "answers": [
+        "1",
+        "2",
+        "10",
+        "Сколько захотим"
+      ],
+      "correct": "1"
     }
   ]
 }
