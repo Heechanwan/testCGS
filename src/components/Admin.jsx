@@ -4,7 +4,7 @@ import { db } from '../firebase';
 import { motion, AnimatePresence } from 'framer-motion';
 
 
-const classes = ['5', '6', '7-8', '9-10-11'];
+const classes = ['3-4', '5-6', '7-8', '9-10-11'];
 const ADMIN_PASSWORD = '97485031';
 
 function Admin() {
@@ -25,19 +25,26 @@ function Admin() {
   useEffect(() => {
     if (authenticated) {
       const fetchAll = async () => {
+        console.log('🔍 Начинаем загрузку учеников...');
         const data = {};
         for (const cls of classes) {
+          console.log(`📚 Загружаем класс: ${cls}`);
           const classCol = collection(db, `results/${cls}/students`);
           const snap = await getDocs(classCol);
+          console.log(`✅ Класс ${cls}: найдено ${snap.docs.length} учеников`);
           data[cls] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          console.log(`📊 Данные класса ${cls}:`, data[cls]);
         }
+        console.log('🎯 Все данные:', data);
         setStudents(data);
 
         const initialOpen = {};
         classes.forEach((cls) => (initialOpen[cls] = true));
         setOpenClasses(initialOpen);
       };
-      fetchAll();
+      fetchAll().catch(err => {
+        console.error('❌ Ошибка загрузки:', err);
+      });
     }
   }, [authenticated]);
 
