@@ -12,7 +12,7 @@ const InteractiveBackground = () => {
         const spacing = 25;
         const radius = 1;
         const interactionRadius = 150;
-        const mouseStrength = 0.5;
+        const mouseStrength = 1;
 
         // Wave parameters
         const waveSpeed = 0.5; // Pixels per ms
@@ -132,7 +132,7 @@ const InteractiveBackground = () => {
 
                 // Color logic
                 if (active) {
-                    ctx.fillStyle = forcedColor || point.color || activeGray;
+                    ctx.fillStyle = forcedColor || mouseColor || point.color || activeGray;
                 } else {
                     ctx.fillStyle = dotColor;
                 }
@@ -163,6 +163,11 @@ const InteractiveBackground = () => {
             });
         };
 
+        let mouseColor = null;
+        const handleUpdateMouseColor = (e) => {
+            mouseColor = e.detail.color;
+        };
+
         const handleClick = (e) => {
             // Ignore clicks on interactive elements or containers
             if (e.target.closest('button, input, label, a, .centered, .card')) {
@@ -182,6 +187,7 @@ const InteractiveBackground = () => {
         window.addEventListener('mouseout', handleMouseLeave);
         window.addEventListener('click', handleClick);
         window.addEventListener('trigger-ripple', handleTriggerRipple);
+        window.addEventListener('update-mouse-color', handleUpdateMouseColor);
 
         resize();
         draw();
@@ -192,6 +198,7 @@ const InteractiveBackground = () => {
             window.removeEventListener('mouseout', handleMouseLeave);
             window.removeEventListener('click', handleClick);
             window.removeEventListener('trigger-ripple', handleTriggerRipple);
+            window.removeEventListener('update-mouse-color', handleUpdateMouseColor);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

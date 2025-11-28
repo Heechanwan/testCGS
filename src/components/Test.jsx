@@ -63,11 +63,20 @@ function Test() {
     fetchQuestions();
   }, [classId, name]);
 
+  // Reset mouse color on unmount
+  useEffect(() => {
+    return () => {
+      window.dispatchEvent(new CustomEvent('update-mouse-color', { detail: { color: null } }));
+    };
+  }, []);
+
   const handleAnswer = (answer, event) => {
     setSelectedAnswer(answer);
     const correctAnswer = questions[currentQuestionIndex].correct;
     const isAnswerCorrect = answer === correctAnswer;
     setIsCorrect(isAnswerCorrect);
+
+    const color = isAnswerCorrect ? '#4CAF50' : '#B3261E';
 
     // Trigger ripple effect
     if (event) {
@@ -77,20 +86,22 @@ function Test() {
         const rect = label.getBoundingClientRect();
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
-        // Use Material Design colors: Green (Success) or Red (Error)
-        // We can use the CSS variables or hardcoded hexes that match
-        const color = isAnswerCorrect ? '#4CAF50' : '#B3261E';
 
         window.dispatchEvent(new CustomEvent('trigger-ripple', {
           detail: { x, y, color }
         }));
       }
     }
+
+    // Update mouse trail color
+    window.dispatchEvent(new CustomEvent('update-mouse-color', {
+      detail: { color }
+    }));
   };
 
   const handleNext = async () => {
-    const newAnswers = [...answers, { 
-      answer: selectedAnswer, 
+    const newAnswers = [...answers, {
+      answer: selectedAnswer,
       correct: isCorrect,
       question: questions[currentQuestionIndex].question,
       correctAnswer: questions[currentQuestionIndex].correct
@@ -100,6 +111,9 @@ function Test() {
     setAnsweredQuestions(newAnsweredQuestions);
     setSelectedAnswer(null);
     setIsCorrect(null);
+
+    // Reset mouse color
+    window.dispatchEvent(new CustomEvent('update-mouse-color', { detail: { color: null } }));
 
     if (currentQuestionIndex + 1 < questions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);

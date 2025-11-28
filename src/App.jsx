@@ -111,6 +111,9 @@ function App() {
         location.pathname !== '/home' &&
         !location.pathname.startsWith('/test/');
 
+    // Hide theme toggle during test
+    const showThemeToggle = !location.pathname.startsWith('/test/');
+
     return (
         <div className="app">
             <CustomCursor />
@@ -124,9 +127,11 @@ function App() {
                         Назад
                     </button>
                 )}
-                <button onClick={toggleTheme} style={{ margin: 0 }}>
-                    {theme === 'light' ? '🌙' : '☀️'}
-                </button>
+                {showThemeToggle && (
+                    <button onClick={toggleTheme} style={{ margin: 0 }}>
+                        {theme === 'light' ? '🌙' : '☀️'}
+                    </button>
+                )}
             </div>
 
             <Routes>
