@@ -89,7 +89,12 @@ function Test() {
   };
 
   const handleNext = async () => {
-    const newAnswers = [...answers, { answer: selectedAnswer, correct: isCorrect }];
+    const newAnswers = [...answers, { 
+      answer: selectedAnswer, 
+      correct: isCorrect,
+      question: questions[currentQuestionIndex].question,
+      correctAnswer: questions[currentQuestionIndex].correct
+    }];
     const newAnsweredQuestions = [...answeredQuestions, questions[currentQuestionIndex].originalIndex];
     setAnswers(newAnswers);
     setAnsweredQuestions(newAnsweredQuestions);
