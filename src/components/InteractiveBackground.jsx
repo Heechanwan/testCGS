@@ -8,7 +8,7 @@ const InteractiveBackground = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let points = [];
-        let waves = []; // Array to store active waves {x, y, startTime, color?}
+        let waves = []; // Array to store active waves {x, y, startTime, color?, isPulse?}
         const spacing = 25;
         const radius = 1;
         const interactionRadius = 150;
@@ -19,6 +19,16 @@ const InteractiveBackground = () => {
         const waveFrequency = 0.05;
         const waveAmplitude = 15;
         const waveWidth = 200; // Width of the ripple packet
+
+        // Pulse wave parameters (more intense)
+        const pulseWaveSpeed = 0.7; // Faster
+        const pulseWaveFrequency = 0.08; // More frequent oscillations
+        const pulseWaveAmplitude = 25; // Stronger displacement
+        const pulseWaveWidth = 250; // Wider effect
+
+        // Pulsing state
+        let pulseInterval = null;
+        let pulseSource = null; // {x, y, color}
 
         let mouse = { x: -1000, y: -1000 };
 
@@ -94,18 +104,24 @@ const InteractiveBackground = () => {
                     const dyW = point.originY - wave.y;
                     const distW = Math.sqrt(dxW * dxW + dyW * dyW);
 
-                    const traveled = (now - wave.startTime) * waveSpeed;
+                    // Use different parameters for pulse waves
+                    const speed = wave.isPulse ? pulseWaveSpeed : waveSpeed;
+                    const frequency = wave.isPulse ? pulseWaveFrequency : waveFrequency;
+                    const amplitude = wave.isPulse ? pulseWaveAmplitude : waveAmplitude;
+                    const width = wave.isPulse ? pulseWaveWidth : waveWidth;
+
+                    const traveled = (now - wave.startTime) * speed;
                     const distFromWaveFront = distW - traveled;
 
                     // Only affect points within the "wave packet" range
-                    if (Math.abs(distFromWaveFront) < waveWidth) {
+                    if (Math.abs(distFromWaveFront) < width) {
                         // Sine wave function for ripple effect
                         // We use a Gaussian window to taper the wave packet edges smoothly
                         const x = distFromWaveFront;
                         // Gaussian envelope: exp(-x^2 / (2*sigma^2))
-                        // sigma = waveWidth / 3 ensures it decays to near 0 at edges
-                        const envelope = Math.exp(-(x * x) / (2 * (waveWidth / 3) ** 2));
-                        const displacement = Math.sin(x * waveFrequency) * waveAmplitude * envelope;
+                        // sigma = width / 3 ensures it decays to near 0 at edges
+                        const envelope = Math.exp(-(x * x) / (2 * (width / 3) ** 2));
+                        const displacement = Math.sin(x * frequency) * amplitude * envelope;
 
                         const angle = Math.atan2(dyW, dxW);
 
@@ -168,6 +184,48 @@ const InteractiveBackground = () => {
             mouseColor = e.detail.color;
         };
 
+        const handleStartPulse = (e) => {
+            const { x, y, color } = e.detail;
+
+            // Stop any existing pulse
+            if (pulseInterval) {
+                clearInterval(pulseInterval);
+            }
+
+            // Store pulse source
+            pulseSource = { x, y, color };
+
+            // Create initial pulse
+            waves.push({
+                x,
+                y,
+                startTime: Date.now(),
+                color,
+                isPulse: true
+            });
+
+            // Create pulse every 2 seconds
+            pulseInterval = setInterval(() => {
+                if (pulseSource) {
+                    waves.push({
+                        x: pulseSource.x,
+                        y: pulseSource.y,
+                        startTime: Date.now(),
+                        color: pulseSource.color,
+                        isPulse: true
+                    });
+                }
+            }, 2000);
+        };
+
+        const handleStopPulse = () => {
+            if (pulseInterval) {
+                clearInterval(pulseInterval);
+                pulseInterval = null;
+            }
+            pulseSource = null;
+        };
+
         const handleClick = (e) => {
             // Ignore clicks on interactive elements or containers
             if (e.target.closest('button, input, label, a, .centered, .card')) {
@@ -188,6 +246,8 @@ const InteractiveBackground = () => {
         window.addEventListener('click', handleClick);
         window.addEventListener('trigger-ripple', handleTriggerRipple);
         window.addEventListener('update-mouse-color', handleUpdateMouseColor);
+        window.addEventListener('start-pulse', handleStartPulse);
+        window.addEventListener('stop-pulse', handleStopPulse);
 
         resize();
         draw();
@@ -199,6 +259,11 @@ const InteractiveBackground = () => {
             window.removeEventListener('click', handleClick);
             window.removeEventListener('trigger-ripple', handleTriggerRipple);
             window.removeEventListener('update-mouse-color', handleUpdateMouseColor);
+            window.removeEventListener('start-pulse', handleStartPulse);
+            window.removeEventListener('stop-pulse', handleStopPulse);
+            if (pulseInterval) {
+                clearInterval(pulseInterval);
+            }
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

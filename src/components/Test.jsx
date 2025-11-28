@@ -63,10 +63,11 @@ function Test() {
     fetchQuestions();
   }, [classId, name]);
 
-  // Reset mouse color on unmount
+  // Reset mouse color and stop pulse on unmount
   useEffect(() => {
     return () => {
       window.dispatchEvent(new CustomEvent('update-mouse-color', { detail: { color: null } }));
+      window.dispatchEvent(new CustomEvent('stop-pulse'));
     };
   }, []);
 
@@ -78,7 +79,7 @@ function Test() {
 
     const color = isAnswerCorrect ? '#4CAF50' : '#B3261E';
 
-    // Trigger ripple effect
+    // Trigger ripple effect and pulse
     if (event) {
       // Get the label element (parent of the radio input)
       const label = event.target.closest('label');
@@ -87,7 +88,13 @@ function Test() {
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
 
+        // Initial ripple
         window.dispatchEvent(new CustomEvent('trigger-ripple', {
+          detail: { x, y, color }
+        }));
+
+        // Start pulsing from this location
+        window.dispatchEvent(new CustomEvent('start-pulse', {
           detail: { x, y, color }
         }));
       }
@@ -112,7 +119,8 @@ function Test() {
     setSelectedAnswer(null);
     setIsCorrect(null);
 
-    // Reset mouse color
+    // Stop pulse and reset mouse color
+    window.dispatchEvent(new CustomEvent('stop-pulse'));
     window.dispatchEvent(new CustomEvent('update-mouse-color', { detail: { color: null } }));
 
     if (currentQuestionIndex + 1 < questions.length) {
