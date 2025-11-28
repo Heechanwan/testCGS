@@ -11,9 +11,10 @@ import InteractiveBackground from './components/InteractiveBackground';
 import CopyrightInfo from './components/CopyrightInfo';
 import CustomCursor from './components/CustomCursor';
 import ThemeSelector from './components/ThemeSelector';
+import BackgroundGame from './components/BackgroundGame';
 
 
-const HomeSelection = ({ navigate, onLogout }) => (
+const HomeSelection = ({ navigate, onLogout, onStartGame }) => (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="centered">
         <h2>Выберите действие</h2>
         <div>
@@ -45,6 +46,7 @@ function App() {
     const [palette, setPalette] = useState(() => {
         return localStorage.getItem('palette') || 'default';
     });
+    const [gameMode, setGameMode] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -83,6 +85,14 @@ function App() {
         navigate('/');
     };
 
+    const handleStartGame = () => {
+        setGameMode(true);
+    };
+
+    const handleCloseGame = () => {
+        setGameMode(false);
+    };
+
     // Компонент для отображения формы входа
     const PasswordForm = () => (
         <motion.div
@@ -106,13 +116,16 @@ function App() {
     };
 
     // Logic for back button visibility
-    // Hide on: Login (/), Home (/home), Test (/test/...)
-    const showBackButton = location.pathname !== '/' &&
+    // Hide on: Login (/), Home (/home), Test (/test/...), Game mode
+    const showBackButton = !gameMode && location.pathname !== '/' &&
         location.pathname !== '/home' &&
         !location.pathname.startsWith('/test/');
 
-    // Hide theme toggle during test
-    const showThemeToggle = !location.pathname.startsWith('/test/');
+    // Hide theme toggle during test or game mode
+    const showThemeToggle = !gameMode && !location.pathname.startsWith('/test/');
+
+    // Show game button only on home page
+    const showGameButton = location.pathname === '/home' && !gameMode;
 
     return (
         <div className="app">
@@ -120,50 +133,70 @@ function App() {
             <InteractiveBackground />
             {!passwordEntered && <CopyrightInfo />}
 
+            {/* Game Mode */}
+            {gameMode && <BackgroundGame onClose={handleCloseGame} />}
+
             {/* Navigation Controls */}
-            <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000, display: 'flex', gap: '10px' }}>
-                {showBackButton && (
-                    <button onClick={() => navigate(-1)} style={{ margin: 0 }}>
-                        Назад
-                    </button>
-                )}
-                {showThemeToggle && (
-                    <button onClick={toggleTheme} style={{ margin: 0 }}>
-                        {theme === 'light' ? '🌙' : '☀️'}
-                    </button>
-                )}
-            </div>
+            {!gameMode && (
+                <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000, display: 'flex', gap: '10px' }}>
+                    {showBackButton && (
+                        <button onClick={() => navigate(-1)} style={{ margin: 0 }}>
+                            Назад
+                        </button>
+                    )}
+                    {showGameButton && (
+                        <button
+                            onClick={handleStartGame}
+                            style={{
+                                margin: 0,
+                                fontSize: '24px',
+                                padding: '8px 12px'
+                            }}
+                            title="Игровой режим"
+                        >
+                            🎮
+                        </button>
+                    )}
+                    {showThemeToggle && (
+                        <button onClick={toggleTheme} style={{ margin: 0 }}>
+                            {theme === 'light' ? '🌙' : '☀️'}
+                        </button>
+                    )}
+                </div>
+            )}
 
-            <Routes>
-                {/* 1. Главная страница (форма входа) */}
-                <Route path="/" element={passwordEntered ? <Navigate to="/home" replace /> : <PasswordForm />} />
+            {!gameMode && (
+                <Routes>
+                    {/* 1. Главная страница (форма входа) */}
+                    <Route path="/" element={passwordEntered ? <Navigate to="/home" replace /> : <PasswordForm />} />
 
-                {/* 2. Роуты, доступные ТОЛЬКО после успешного входа (Protected Routes) */}
+                    {/* 2. Роуты, доступные ТОЛЬКО после успешного входа (Protected Routes) */}
 
-                {/* Домашняя страница (выбор Ученик/Админ) с кнопкой выхода */}
-                <Route
-                    path="/home"
-                    element={<ProtectedRoute
-                        element={<HomeSelection navigate={navigate} onLogout={handleLogout} />}
-                    />}
-                />
+                    {/* Домашняя страница (выбор Ученик/Админ) с кнопкой выхода */}
+                    <Route
+                        path="/home"
+                        element={<ProtectedRoute
+                            element={<HomeSelection navigate={navigate} onLogout={handleLogout} onStartGame={handleStartGame} />}
+                        />}
+                    />
 
-                {/* Роут администратора */}
-                <Route path="/admin" element={<ProtectedRoute element={<Admin />} />} />
+                    {/* Роут администратора */}
+                    <Route path="/admin" element={<ProtectedRoute element={<Admin />} />} />
 
-                {/* Роуты для учеников */}
-                <Route path="/classes" element={<ProtectedRoute element={<ClassSelect />} />} />
-                <Route path="/name/:classId" element={<ProtectedRoute element={<NameInput />} />} />
-                <Route path="/test/:classId/:name" element={<ProtectedRoute element={<Test />} />} />
-                <Route path="/profile/:classId/:name" element={<ProtectedRoute element={<Profile />} />} />
+                    {/* Роуты для учеников */}
+                    <Route path="/classes" element={<ProtectedRoute element={<ClassSelect />} />} />
+                    <Route path="/name/:classId" element={<ProtectedRoute element={<NameInput />} />} />
+                    <Route path="/test/:classId/:name" element={<ProtectedRoute element={<Test />} />} />
+                    <Route path="/profile/:classId/:name" element={<ProtectedRoute element={<Profile />} />} />
 
-                {/* 3. Роут-заглушка для любых других ненайденных адресов (404) */}
-                <Route path="*" element={<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="centered">
-                    <h2>404</h2>
-                    <p>Страница не найдена. <button onClick={() => navigate('/')}>На главную</button></p>
-                </motion.div>} />
+                    {/* 3. Роут-заглушка для любых других ненайденных адресов (404) */}
+                    <Route path="*" element={<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="centered">
+                        <h2>404</h2>
+                        <p>Страница не найдена. <button onClick={() => navigate('/')}>На главную</button></p>
+                    </motion.div>} />
 
-            </Routes>
+                </Routes>
+            )}
         </div>
     );
 }
