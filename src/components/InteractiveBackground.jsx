@@ -10,7 +10,7 @@ const InteractiveBackground = () => {
         let points = [];
         let waves = []; // Array to store active waves {x, y, startTime, color?, isPulse?}
         const spacing = 25;
-        const radius = 1;
+        const radius = 2;
         const interactionRadius = 150;
         const mouseStrength = 1;
 
