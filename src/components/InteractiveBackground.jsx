@@ -31,6 +31,8 @@ const InteractiveBackground = () => {
         let pulseSource = null; // {x, y, color}
 
         let mouse = { x: -1000, y: -1000 };
+        let performanceRatio = null; // 0 (bad/red) to 1 (good/green), null = default
+
 
         const getThemeColors = () => {
             const styles = getComputedStyle(document.documentElement);
@@ -70,6 +72,21 @@ const InteractiveBackground = () => {
             const now = Date.now();
             // Calculate max distance to corner to know when to remove wave
             const maxDist = Math.sqrt(canvas.width ** 2 + canvas.height ** 2) + 200;
+
+            // Determine base dot color based on performance
+            let currentDotColor = dotColor;
+            if (performanceRatio !== null) {
+                // Interpolate between Red (bad) and Green (good)
+                // Red: 255, 0, 0
+                // Green: 76, 175, 80 (Material Green 500)
+
+                const r = Math.round(255 - (performanceRatio * (255 - 76)));
+                const g = Math.round(0 + (performanceRatio * 175));
+                const b = Math.round(0 + (performanceRatio * 80));
+
+                // Opacity 0.2 like default
+                currentDotColor = `rgba(${r}, ${g}, ${b}, 0.3)`;
+            }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -150,7 +167,7 @@ const InteractiveBackground = () => {
                 if (active) {
                     ctx.fillStyle = forcedColor || mouseColor || point.color || activeGray;
                 } else {
-                    ctx.fillStyle = dotColor;
+                    ctx.fillStyle = currentDotColor;
                 }
 
                 ctx.fill();
@@ -226,6 +243,10 @@ const InteractiveBackground = () => {
             pulseSource = null;
         };
 
+        const handleUpdatePerformance = (e) => {
+            performanceRatio = e.detail.ratio;
+        };
+
         const handleClick = (e) => {
             // Ignore clicks on interactive elements or containers
             if (e.target.closest('button, input, label, a, .centered, .card')) {
@@ -247,7 +268,9 @@ const InteractiveBackground = () => {
         window.addEventListener('trigger-ripple', handleTriggerRipple);
         window.addEventListener('update-mouse-color', handleUpdateMouseColor);
         window.addEventListener('start-pulse', handleStartPulse);
+        window.addEventListener('start-pulse', handleStartPulse);
         window.addEventListener('stop-pulse', handleStopPulse);
+        window.addEventListener('update-performance', handleUpdatePerformance);
 
         resize();
         draw();
@@ -260,7 +283,9 @@ const InteractiveBackground = () => {
             window.removeEventListener('trigger-ripple', handleTriggerRipple);
             window.removeEventListener('update-mouse-color', handleUpdateMouseColor);
             window.removeEventListener('start-pulse', handleStartPulse);
+            window.removeEventListener('start-pulse', handleStartPulse);
             window.removeEventListener('stop-pulse', handleStopPulse);
+            window.removeEventListener('update-performance', handleUpdatePerformance);
             if (pulseInterval) {
                 clearInterval(pulseInterval);
             }

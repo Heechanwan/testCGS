@@ -187,6 +187,24 @@ p {
   position: relative;
   box-shadow: var(--elevation-1);
   border: 1px solid var(--md-sys-color-outline-variant);
+  z-index: 100;
+  /* Ensure UI is above glitches */
+}
+
+/* ... (skipping unchanged parts) ... */
+
+.error-text-glitch {
+  position: fixed;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  z-index: 50;
+  /* Below .centered (100) but visible on background */
+  pointer-events: none;
+  text-transform: uppercase;
+  animation: text-glitch 0.15s infinite;
+  mix-blend-mode: hard-light;
+  opacity: 0.6;
+  /* Slightly transparent */
 }
 
 /* --- Animated Border Beam --- */
@@ -467,4 +485,206 @@ input:focus {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--md-sys-color-outline);
+}
+
+/* --- GLITCH EFFECT (CRAZY & BEAUTIFUL) --- */
+.screen-glitch-active {
+  animation: crazy-shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+  position: relative;
+}
+
+.screen-glitch-active::before,
+.screen-glitch-active::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9900;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.screen-glitch-active::before {
+  background: rgba(0, 255, 255, 0.2);
+  transform: translateX(-5px);
+  animation: rgb-split-1 0.3s infinite linear alternate-reverse;
+}
+
+.screen-glitch-active::after {
+  background: rgba(255, 0, 255, 0.2);
+  transform: translateX(5px);
+  animation: rgb-split-2 0.3s infinite linear alternate-reverse;
+}
+
+@keyframes crazy-shake {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    filter: hue-rotate(0deg) contrast(100%);
+  }
+
+  10% {
+    transform: translate(-10px, -10px) rotate(-2deg);
+    filter: hue-rotate(90deg) contrast(150%);
+  }
+
+  20% {
+    transform: translate(10px, 10px) rotate(2deg);
+    filter: hue-rotate(180deg) invert(10%);
+  }
+
+  30% {
+    transform: translate(-15px, 5px) rotate(-1deg);
+    filter: hue-rotate(270deg) contrast(200%);
+  }
+
+  40% {
+    transform: translate(15px, -5px) rotate(3deg);
+    filter: hue-rotate(0deg) invert(20%);
+  }
+
+  50% {
+    transform: translate(-5px, 15px) rotate(-3deg);
+    filter: hue-rotate(90deg) contrast(150%);
+  }
+
+  60% {
+    transform: translate(5px, -15px) rotate(1deg);
+    filter: hue-rotate(180deg) invert(0%);
+  }
+
+  70% {
+    transform: translate(-20px, 10px) rotate(-2deg);
+    filter: hue-rotate(270deg) contrast(150%);
+  }
+
+  80% {
+    transform: translate(10px, -20px) rotate(2deg);
+    filter: hue-rotate(0deg) invert(10%);
+  }
+
+  90% {
+    transform: translate(-10px, 5px) rotate(-1deg);
+    filter: hue-rotate(90deg) contrast(100%);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+}
+
+@keyframes rgb-split-1 {
+  0% {
+    clip-path: inset(20% 0 80% 0);
+    transform: translate(-5px, 2px);
+  }
+
+  20% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(5px, -2px);
+  }
+
+  40% {
+    clip-path: inset(40% 0 50% 0);
+    transform: translate(-5px, 5px);
+  }
+
+  60% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(5px, -5px);
+  }
+
+  80% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-5px, 2px);
+  }
+
+  100% {
+    clip-path: inset(30% 0 20% 0);
+    transform: translate(5px, -2px);
+  }
+}
+
+@keyframes rgb-split-2 {
+  0% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(5px, -2px);
+  }
+
+  20% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(-5px, 2px);
+  }
+
+  40% {
+    clip-path: inset(30% 0 20% 0);
+    transform: translate(5px, -5px);
+  }
+
+  60% {
+    clip-path: inset(10% 0 80% 0);
+    transform: translate(-5px, 5px);
+  }
+
+  80% {
+    clip-path: inset(50% 0 30% 0);
+    transform: translate(5px, -2px);
+  }
+
+  100% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translate(-5px, 2px);
+  }
+}
+
+.error-text-glitch {
+  position: fixed;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  z-index: 50;
+  /* Below UI (100) */
+  pointer-events: none;
+  text-transform: uppercase;
+  animation: text-glitch 0.15s infinite;
+  mix-blend-mode: hard-light;
+  opacity: 0.6;
+  /* Transparent */
+}
+
+@keyframes text-glitch {
+  0% {
+    text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+    transform: skew(0deg);
+  }
+
+  20% {
+    text-shadow: -2px 2px #ff00ff, 2px -2px #00ffff;
+    transform: skew(10deg);
+    opacity: 0.8;
+  }
+
+  40% {
+    text-shadow: 2px -2px #ff00ff, -2px 2px #00ffff;
+    transform: skew(-10deg);
+    opacity: 1;
+  }
+
+  60% {
+    text-shadow: -2px -2px #ff00ff, 2px 2px #00ffff;
+    transform: skew(5deg);
+    opacity: 0.9;
+  }
+
+  80% {
+    text-shadow: 3px 0px #00ff00, -3px 0px #ff0000;
+    transform: skew(-5deg);
+  }
+
+  100% {
+    text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+    transform: skew(0deg);
+  }
 }

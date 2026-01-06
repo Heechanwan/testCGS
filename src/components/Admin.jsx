@@ -14,6 +14,7 @@ function Admin() {
   const [editingName, setEditingName] = useState({});
   const [newName, setNewName] = useState({});
   const [openClasses, setOpenClasses] = useState({});
+  const [questionLimits, setQuestionLimits] = useState({});
 
   // New state for modal
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -38,11 +39,23 @@ function Admin() {
           const classCol = collection(db, `results/${cls}/students`);
           const snap = await getDocs(classCol);
           console.log(`✅ Класс ${cls}: найдено ${snap.docs.length} учеников`);
-          data[cls] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          // Sort by grade descending
+          data[cls] = snap.docs
+            .map((d) => ({ id: d.id, ...d.data() }))
+            .sort((a, b) => (b.grade || 0) - (a.grade || 0));
           console.log(`📊 Данные класса ${cls}:`, data[cls]);
         }
         console.log('🎯 Все данные:', data);
+        console.log('🎯 Все данные:', data);
         setStudents(data);
+
+        // Fetch settings
+        const settingsRef = doc(db, 'settings', 'config');
+        getDoc(settingsRef).then((snap) => {
+          if (snap.exists()) {
+            setQuestionLimits(snap.data().maxQuestions || {});
+          }
+        });
 
         const initialOpen = {};
         classes.forEach((cls) => (initialOpen[cls] = true));
@@ -118,6 +131,22 @@ function Admin() {
 
   const handleNameChange = (cls, id, value) => {
     setNewName((prev) => ({ ...prev, [`${cls}-${id}`]: value }));
+  };
+
+  const handleLimitChange = (cls, val) => {
+    setQuestionLimits((prev) => ({ ...prev, [cls]: val }));
+  };
+
+  const saveSettings = async () => {
+    try {
+      await setDoc(doc(db, 'settings', 'config'), {
+        maxQuestions: questionLimits
+      }, { merge: true });
+      alert('Настройки сохранены!');
+    } catch (e) {
+      console.error("Error saving settings: ", e);
+      alert('Ошибка при сохранении настроек');
+    }
   };
 
   // Modal functions
@@ -200,6 +229,57 @@ function Admin() {
     >
       <h2 style={{ textAlign: 'center' }}>Админ панель</h2>
 
+      <div style={{
+        marginBottom: '2rem',
+        padding: '1.5rem',
+        border: '1px solid #333',
+        borderRadius: '12px',
+        backgroundColor: '#1e1e1e'
+      }}>
+        <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>Настройки теста</h3>
+        <p style={{ color: '#888', marginBottom: '1rem', fontSize: '0.9rem' }}>
+          Укажите максимальное количество вопросов для каждого класса. Если оставить пустым — будут показаны все доступные вопросы.
+        </p>
+        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          {classes.map(cls => (
+            <div key={cls} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.9rem', color: '#aaa' }}>Класс {cls}</label>
+              <input
+                type="number"
+                min="1"
+                value={questionLimits[cls] || ''}
+                onChange={(e) => handleLimitChange(cls, e.target.value)}
+                placeholder="Все"
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '6px',
+                  border: '1px solid #444',
+                  backgroundColor: '#2a2a2a',
+                  color: '#fff',
+                  width: '100px',
+                  fontSize: '1rem'
+                }}
+              />
+            </div>
+          ))}
+          <button
+            onClick={saveSettings}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#4CAF50',
+              border: 'none',
+              borderRadius: '6px',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '1rem'
+            }}
+          >
+            Сохранить настройки
+          </button>
+        </div>
+      </div>
+
       {classes.map((cls) => (
         <motion.div
           key={cls}
@@ -266,7 +346,12 @@ function Admin() {
                         </div>
                       ) : (
                         <>
-                          <h4 className="student-name">{student.id}</h4>
+                          <h4 className="student-name">
+                            {student.id}
+                            {student.grade >= 80 && index === 0 && ' 👑'}
+                            {student.grade >= 80 && index === 1 && ' 💎'}
+                            {student.grade >= 80 && index === 2 && ' 🥉'}
+                          </h4>
                           <div className="grade-container">
                             <span className="grade-label">Оценка:</span>
                             <span className={`grade-value grade-${getGradeColor(student.grade)}`}>
